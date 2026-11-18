@@ -30,6 +30,7 @@
 ## Table of Contents
 
 - [Model Introduction](#model-introduction)
+- [Pretrained model capability](#pretrained-model-capability)
 - [Practicality and Cost Efficiency](#practicality-and-cost-efficiency)
   - [Optimization Approach](#optimization-approach)
   - [Task Performance and Cost](#task-performance-and-cost)
@@ -114,6 +115,55 @@ Compared with Hy4, Hy4 Flash introduces three notable architectural changes:
 | Vision Patch Size | 16 × 16 |
 | Vision Position Embedding Size | 128 × 128 |
 | Visual Feature Merging | 2 x 2 |
+
+## Pretrained model capability
+
+Bits-per-byte (BPB) on internal code & agent validation, lower is better:
+
+<p align="center">
+  <a href="pretrained-model-bpb.png"><img src="pretrained-model-bpb.png" alt="Bits-per-byte on internal code and agent validation versus active parameters; lower is better" width="100%"/></a>
+</p>
+
+Few-shot pretrain benchmark evaluation:
+
+| Category | Benchmark | #Shots | Hy4 flash Base | Hy4 Base | Hy3 preview Base | DeepSeek-V4-flash-Base | DeepSeek-V4-Pro-Base |
+| --- | --- | :---: | ---: | ---: | ---: | ---: | ---: |
+| **Knowledge** | MMLU† | 5 | 88.7 | **91.6** | 87.5 | 89.7 | 91.1 |
+|  | MMLU-Pro† | 5 | 71.1 | **73.9** | 65.8 | 68.6 | 73.4 |
+|  | MMLU-Redux† | 5 | 87.6 | **90.6** | 87.0 | 88.8 | 90.2 |
+|  | SuperGPQA† | 5 | 57.8 | **62.7** | 52.3 | 52.5 | 54.8 |
+|  | C-Eval† | 5 | 92.0 | **95.0** | 90.1 | 91.9 | 93.4 |
+|  | CMMLU† | 5 | 91.6 | **93.1** | 89.6 | 89.8 | 90.7 |
+|  | SimpleQA | 5 | 37.5 | **57.2** | 26.4 | 31.3 | 52.1 |
+|  | Chinese-SimpleQA† | 5 | 74.6 | **83.9** | 69.6 | 71.9 | 76.6 |
+|  | AGIEval (English)† | 3 | 75.4 | **79.3** | 76.0 | 76.3 | 78.2 |
+|  | AGIEval (Chinese)† | 3 | 90.6 | **91.2** | 87.8 | 88.5 | 89.8 |
+| **Reasoning** | HellaSwag (3,000-item subset) | 10 | 85.2 | **87.1** | 85.7 | 85.1 | 86.8 |
+|  | PIQA | 4 | 84.4 | **85.3** | 84.6 | 83.8 | 84.9 |
+|  | ARC-Challenge | 0 | 95.0 | **97.3** | 96.0 | **97.3** | 97.0 |
+|  | Social IQa | 0 | 80.1 | **82.7** | 80.5 | 72.5 | 73.1 |
+|  | KOR-Bench | 3 | 54.7 | **57.6** | 54.6 | 53.4 | 55.4 |
+|  | C³ | 0 | 77.3 | **82.4** | 75.9 | 74.1 | 78.3 |
+| **Math** | U-MATH | 5 | 69.8 | **71.6** | 60.9 | 57.4 | 64.8 |
+|  | OCW Courses | 5 | 64.0 | 66.7 | 62.6 | 63.3 | **68.2** |
+| **Code** | MBPP-plus | 3 | 73.7 | 74.0 | 77.4 | 76.8 | **79.1** |
+|  | BigCodeBench (Full) | 0 | 58.8 | 47.9 | **59.6** | 58.0 | 57.5 |
+| **Multilingual** | Belebele (5-language subset)† | 5 | 93.8 | 95.0 | 94.2 | 94.4 | **95.2** |
+|  | INCLUDE† | 5 | 82.8 | **88.1** | 84.3 | 84.0 | 84.3 |
+| **Multimodal** | MMMU-Pro (Standard, 10 opts) | 4 | 52.0 | **59.6** | — | — | — |
+|  | SimpleVQA | 4 | 48.5 | **54.5** | — | — | — |
+|  | CVBench | 4 | 83.4 | **86.7** | — | — | — |
+|  | RealWorldQA | 4 | 71.1 | **72.3** | — | — | — |
+|  | TextVQA | 4 | 73.4 | **78.2** | — | — | — |
+|  | CountBenchQA | 4 | 86.6 | **90.6** | — | — | — |
+
+† Macro-averaged accuracy for the marked text benchmarks. Other text rows use the accuracy metric reported by our evaluation suite. Bold marks the highest available numerical score in each row; it does not indicate statistical significance.
+
+Multimodal results are reported only for Hy4 flash Base and Hy4 Base.
+
+ARC-Challenge and HellaSwag use 299-item and 3,000-item subsets, respectively. INCLUDE uses a 5,000-example Lite subset covering 44 languages. Belebele covers German, Korean, Vietnamese, Spanish, and Russian (4,475 examples in total).
+
+**Disclaimer: Because our base model was exposed to a large amount of synthetic instruction data during mid-training, it occasionally fails to follow the expected answer format in few-shot evaluations, which may distort the scores.**
 
 ## Practicality and Cost Efficiency
 
