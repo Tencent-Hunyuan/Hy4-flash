@@ -304,7 +304,7 @@ DFly2 is Hy4 flash's speculative-decoding drafter, trained with [AngelSpec](http
 - **PD-disaggregation ready**: not involved in prefill; the prefill-to-decode transfer adds only one last-layer hidden state.
 
 <p align="center">
-  <a href="assets/dfly2.png"><img src="assets/dfly2.png" alt="DFly2 architecture: each draft layer reuses the KV cache and the indexer-selected positions of a sparse attention layer of Hy4 flash" width="40%"/></a>
+  <a href="assets/dfly2.png"><img src="assets/dfly2.png" alt="DFly2 architecture: each draft layer reuses the KV cache and the indexer-selected positions of a sparse attention layer of Hy4 flash" width="75%"/></a>
 </p>
 
 ### Quantization

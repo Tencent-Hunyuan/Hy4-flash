@@ -304,7 +304,7 @@ DFly2 是基于 [AngelSpec](https://github.com/Tencent/AngelSpec) 框架训练�
 - **适配 PD 分离**：不参与 prefill，P→D 仅额外传输一个末层隐状态。
 
 <p align="center">
-  <a href="assets/dfly2.png"><img src="assets/dfly2.png" alt="DFly2 结构图：每个 draft 层复用 Hy4 flash 对应稀疏注意力层的 KV cache 与压缩索引器选出的位置" width="40%"/></a>
+  <a href="assets/dfly2.png"><img src="assets/dfly2.png" alt="DFly2 结构图：每个 draft 层复用 Hy4 flash 对应稀疏注意力层的 KV cache 与压缩索引器选出的位置" width="75%"/></a>
 </p>
 
 ### 量化工具
