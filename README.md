@@ -121,7 +121,7 @@ Compared with Hy4, Hy4 Flash introduces three notable architectural changes:
 Bits-per-byte (BPB) on internal code & agent validation, lower is better:
 
 <p align="center">
-  <a href="pretrained-model-bpb.png"><img src="pretrained-model-bpb.png" alt="Bits-per-byte on internal code and agent validation versus active parameters; lower is better" width="100%"/></a>
+  <a href="pretrained-model-bpb.png"><img src="pretrained-model-bpb.png" alt="Bits-per-byte on internal code and agent validation versus active parameters; lower is better" width="75%"/></a>
 </p>
 
 Few-shot pretrain benchmark evaluation:
@@ -147,7 +147,6 @@ Few-shot pretrain benchmark evaluation:
 | **Math** | U-MATH | 5 | 69.8 | **71.6** | 60.9 | 57.4 | 64.8 |
 |  | OCW Courses | 5 | 64.0 | 66.7 | 62.6 | 63.3 | **68.2** |
 | **Code** | MBPP-plus | 3 | 73.7 | 74.0 | 77.4 | 76.8 | **79.1** |
-|  | BigCodeBench (Full) | 0 | 58.8 | 47.9 | **59.6** | 58.0 | 57.5 |
 | **Multilingual** | Belebele (5-language subset)† | 5 | 93.8 | 95.0 | 94.2 | 94.4 | **95.2** |
 |  | INCLUDE† | 5 | 82.8 | **88.1** | 84.3 | 84.0 | 84.3 |
 | **Multimodal** | MMMU-Pro (Standard, 10 opts) | 4 | 52.0 | **59.6** | — | — | — |

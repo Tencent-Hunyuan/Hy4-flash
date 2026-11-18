@@ -121,7 +121,7 @@
 内部代码与 Agent 验证集上的 BPB（Bits-per-byte，每字节比特数），数值越低越好：
 
 <p align="center">
-  <a href="pretrained-model-bpb.png"><img src="pretrained-model-bpb.png" alt="内部代码与 Agent 验证集上的 BPB 与激活参数量对比，BPB 越低越好" width="100%"/></a>
+  <a href="pretrained-model-bpb.png"><img src="pretrained-model-bpb.png" alt="内部代码与 Agent 验证集上的 BPB 与激活参数量对比，BPB 越低越好" width="75%"/></a>
 </p>
 
 预训练模型的 few-shot 基准评测结果：
@@ -147,7 +147,6 @@
 | **数学** | U-MATH | 5 | 69.8 | **71.6** | 60.9 | 57.4 | 64.8 |
 |  | OCW Courses | 5 | 64.0 | 66.7 | 62.6 | 63.3 | **68.2** |
 | **代码** | MBPP-plus | 3 | 73.7 | 74.0 | 77.4 | 76.8 | **79.1** |
-|  | BigCodeBench (Full) | 0 | 58.8 | 47.9 | **59.6** | 58.0 | 57.5 |
 | **多语言** | Belebele (5-language subset)† | 5 | 93.8 | 95.0 | 94.2 | 94.4 | **95.2** |
 |  | INCLUDE† | 5 | 82.8 | **88.1** | 84.3 | 84.0 | 84.3 |
 | **多模态** | MMMU-Pro (Standard, 10 opts) | 4 | 52.0 | **59.6** | — | — | — |
