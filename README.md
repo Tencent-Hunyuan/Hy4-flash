@@ -66,9 +66,10 @@ Compared with Hy4, Hy4 Flash introduces three notable architectural changes:
 | --- | --- |
 | **Overview** | |
 | Architecture | Mixture-of-Experts (MoE) |
-| Total Parameters (excluding Engram and ViT) | 155.5B |
+| Total Parameters (excluding Engram, ViT, and DFly2) | 155.5B |
 | Engram Parameters | 63.5B |
 | ViT Parameters | 0.43B |
+| DFly2 Parameters | 0.85B |
 | Activated Parameters per Token | Text 11.3B + Vision 0.43B |
 | Context Length | 1M (1,048,576 tokens) |
 | **Language Backbone** | |
@@ -133,12 +134,12 @@ Across training, evaluation, and inference, we aggressively optimized for cost e
   <a href="assets/performance-cost-workindex.png"><img src="assets/performance-cost-workindex.png" alt="Performance and cost per task on WorkIndex for Hy4 flash and comparison models" width="49%"/></a>
   <a href="assets/performance-cost-open-benchmarks.png"><img src="assets/performance-cost-open-benchmarks.png" alt="Performance and cost per task on Open Benchmarks for Hy4 flash and comparison models" width="49%"/></a>
 </p>
-<p align="center"><sub>Figure 1: Performance and cost across internal and external tasks. WorkIndex (internal) comprises 8 evaluation sets covering slide creation, slide editing, human-AI slide co-writing, Markdown human-AI co-writing, document editing, spreadsheet repair, audio/video processing, and visual understanding.<br/>Open Benchmarks includes 7 public agent benchmarks: DeepSWE, ProgramBench, Terminal-Bench 4.0, APEX-Agents, AutomationBench, HLE, and OSWorld 2.1.</sub></p>
+<p align="left"><sub>Figure 1: Performance and cost across internal and external tasks. WorkIndex (internal) comprises 8 evaluation sets covering slide creation, slide editing, human-AI slide co-writing, Markdown human-AI co-writing, document editing, spreadsheet repair, audio/video processing, and visual understanding.<br/>Open Benchmarks includes 7 public agent benchmarks: DeepSWE, ProgramBench, Terminal-Bench 4.0, APEX-Agents, AutomationBench, HLE, and OSWorld 2.1.</sub></p>
 
 <p align="center">
   <a href="assets/workindex-cost.png"><img src="assets/workindex-cost.png" alt="Average cost per task on WorkIndex for Hy4 flash, Hy4 preview, and Hy4" width="100%"/></a>
 </p>
-<p align="center"><sub>Figure 2: Average cost per task on WorkIndex. Task scores are 42.1 for Hy4 flash, 39.7 for Hy4 preview, and 51.4 for Hy4.</sub></p>
+<p align="left"><sub>Figure 2: Average cost per task on WorkIndex. Task scores are 42.1 for Hy4 flash, 39.7 for Hy4 preview, and 51.4 for Hy4.</sub></p>
 
 We recommend Hy4 flash for most everyday productivity tasks, including **deep search, document processing, slide creation, simple frontend demos, and computer use**. For complex tasks such as long-horizon software engineering, we recommend Hy4 for its higher intelligence ceiling.
 
@@ -149,7 +150,7 @@ In the blind evaluation, **Hy4 flash achieved user satisfaction close to Claude 
 <p align="center">
   <a href="assets/blind-evaluation-en.png"><img src="assets/blind-evaluation-en.png" alt="Blind evaluation comparing user satisfaction, median end-to-end completion time, and cost per task" width="100%"/></a>
 </p>
-<p align="center"><sub>Figure 3: Blind evaluation with 85 internal WorkBuddy users across 259 tasks spanning 27 categories.</sub></p>
+<p align="left"><sub>Figure 3: Blind evaluation with 85 internal WorkBuddy users across 259 tasks spanning 27 categories.</sub></p>
 
 ## Appendix: Benchmark results
 
@@ -267,7 +268,7 @@ For this model, we have provided a [GGUF](https://huggingface.co/AngelSlim/Hy4-f
 
 For production serving, we recommend using [vLLM](https://github.com/vllm-project/vllm) or [SGLang](https://docs.sglang.io/). Please refer to the recipes:
 - [Hy4 flash vLLM Recipe](https://recipes.vllm.ai/tencent/Hy4-flash)
-- [Hy4 flash SGLang Cookbook (Coming Soon)](https://lmsysorg.mintlify.app/cookbook/autoregressive/Tencent/Hy4-flash)
+- [Hy4 flash SGLang Cookbook](https://docs.sglang.io/cookbook/autoregressive/Tencent/Hy4-flash)
 
 #### vLLM
 
@@ -291,7 +292,25 @@ docker run --gpus all \
 
 #### SGLang
 
-The official SGLang prebuilt image is coming soon.
+Use the official prebuilt image `lmsysorg/sglang:hy4-flash` (multi-arch, x86 and Arm):
+
+```bash
+docker pull lmsysorg/sglang:hy4-flash
+
+docker run --gpus all \
+  -p 8000:8000 \
+  --ipc=host \
+  lmsysorg/sglang:hy4-flash \
+  sglang serve \
+    --trust-remote-code \
+    --model-path tencent/Hy4-flash-FP8 \
+    --tp 8 \
+    --cuda-graph-backend-prefill disabled \
+    --speculative-algorithm DFLY \
+    --speculative-dfly-block-size 6 \
+    --host 127.0.0.1 \
+    --port 8000
+```
 
 ## Finetuning
 

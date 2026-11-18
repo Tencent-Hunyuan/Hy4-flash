@@ -93,8 +93,8 @@ Samples without `<image>` or `<video>` tags are treated as pure text and can be 
 
 Based on testing, the minimum resource configuration is as follows:
 
-- **LoRA Fine-tuning**: At least 8 machines with 64 GPUs (at least 96GB GPU memory per GPU, at least 2TB CPU memory per machine).
-- **Full Fine-tuning**: At least 16 machines with 128 GPUs (at least 96GB GPU memory per GPU, at least 2TB CPU memory per machine).
+- **LoRA Fine-tuning**: At least 4 machines with 32 GPUs (at least 96GB GPU memory per GPU, at least 2TB CPU memory per machine).
+- **Full Fine-tuning**: At least 4 machines with 32 GPUs (at least 96GB GPU memory per GPU, at least 2TB CPU memory per machine).
 
 > Note: The above are minimum resource configurations; actual requirements increase with `max_seq_length`, batch size, image resolution, number of video frames, etc. Multimodal data (especially high-resolution images and videos) consumes significantly more memory than pure text.
 
@@ -153,6 +153,14 @@ First, install dependencies (`requirements.txt` is located in the `finetune` roo
 pip install -r ../requirements.txt
 ```
 
+Then install the dev version of transformers that includes Hy4 flash model support (installed from a GitHub PR):
+
+```sh
+pip install "transformers @ git+https://github.com/huggingface/transformers.git@refs/pull/50903/head"
+```
+
+> **Note:** This transformers version includes full support for the Hy4 flash model and is a required dependency for fine-tuning. Once this PR is merged into an official release, you can switch to `pip install transformers>=X.Y.Z`.
+
 Then, in the `deepspeed_support` directory, execute:
 
 ```sh
@@ -167,7 +175,7 @@ bash train_vl.sh
 
 To launch fine-tuning across multiple machines, please first complete the configuration in [Configure Passwordless SSH Login Between Machines](#configure-passwordless-ssh-login-between-machines-multi-machine-training), and ensure all machines are within the same cluster.
 
-Confirm that dependencies are installed (if not, run `pip install -r ../requirements.txt`), then modify the following configuration at the beginning of the corresponding launch script (e.g., `train_llm.sh` or `train_vl.sh`):
+Confirm that dependencies are installed, then modify the following configuration at the beginning of the corresponding launch script (e.g., `train_llm.sh` or `train_vl.sh`):
 
 ```sh
 export HOST_GPU_NUM=8

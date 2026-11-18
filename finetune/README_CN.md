@@ -93,8 +93,8 @@ Hy4 flash 支持图片、视频和纯文本的混合训练。数据格式为 JSO
 
 经过测试，最小的资源配置如下：
 
-- **LoRA 微调**：最少需要 8 机 64 卡，每卡显存至少 96GB，每机 CPU 内存至少 2TB。
-- **全量微调**：最少需要 16 机 128 卡，每卡显存至少 96GB，每机 CPU 内存至少 2TB。
+- **LoRA 微调**：最少需要 4 机 32 卡，每卡显存至少 96GB，每机 CPU 内存至少 2TB。
+- **全量微调**：最少需要 4 机 32 卡，每卡显存至少 96GB，每机 CPU 内存至少 2TB。
 
 > 注：以上为最小资源配置，实际所需资源会随 max_seq_length、batch size、图片分辨率、视频帧数等因素相应增加。多模态数据（尤其是高分辨率图片和视频）的显存消耗显著高于纯文本。
 
@@ -153,6 +153,14 @@ cat ~/.ssh/id_rsa.pub
 pip install -r ../requirements.txt
 ```
 
+然后安装包含 Hy4 flash 模型定义的 transformers 开发版本（从 GitHub PR 安装）：
+
+```sh
+pip install "transformers @ git+https://github.com/huggingface/transformers.git@refs/pull/50903/head"
+```
+
+> **注意：** 此 transformers 版本包含 Hy4 flash 模型的完整支持，是运行微调的必要依赖。待该 PR 合入正式版本后，可改用 `pip install transformers>=X.Y.Z` 安装。
+
 然后在 `deepspeed_support` 目录下，执行：
 
 ```sh
@@ -167,7 +175,7 @@ bash train_vl.sh
 
 如果要用多台机器启动微调，请先完成 [配置机器间免密 ssh 登录](#配置机器间免密-ssh-登录多机训练) 中的配置，并保证多台机器在一个集群内。
 
-确认依赖已经安装完成（如未安装，请执行 `pip install -r ../requirements.txt` 安装），然后修改对应启动脚本（如 `train_llm.sh` 或 `train_vl.sh`）中开头的以下配置：
+确认依赖已经安装完成，然后修改对应启动脚本（如 `train_llm.sh` 或 `train_vl.sh`）中开头的以下配置：
 
 ```sh
 export HOST_GPU_NUM=8

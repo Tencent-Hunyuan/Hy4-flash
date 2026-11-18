@@ -66,9 +66,10 @@
 | --- | --- |
 | **模型概览** | |
 | Architecture | Mixture-of-Experts (MoE) |
-| Total Parameters (excluding Engram and ViT) | 155.5B |
+| Total Parameters (excluding Engram, ViT, and DFly2) | 155.5B |
 | Engram Parameters | 63.5B |
 | ViT Parameters | 0.43B |
+| DFly2 Parameters | 0.85B |
 | Activated Parameters per Token | Text 11.3B + Vision 0.43B |
 | Context Length | 1M (1,048,576 tokens) |
 | **语言模型主干** | |
@@ -133,12 +134,12 @@
   <a href="assets/performance-cost-workindex.png"><img src="assets/performance-cost-workindex.png" alt="Hy4 flash 与对比模型在 WorkIndex 上的得分和单任务成本" width="49%"/></a>
   <a href="assets/performance-cost-open-benchmarks.png"><img src="assets/performance-cost-open-benchmarks.png" alt="Hy4 flash 与对比模型在公开评测上的得分和单任务成本" width="49%"/></a>
 </p>
-<p align="center"><sub>图 1：内外部任务上的效果与成本。WorkIndex (internal) 包含 8 个内部评测集：PPT 制作、PPT 修改、PPT 人机双写、Markdown 人机双写、文档编辑、表格修复、音视频处理和视觉理解。<br/>Open Benchmarks 包含 7 个公开 Agent 评测集：DeepSWE、ProgramBench、Terminal-Bench 4.0、APEX-Agents、AutomationBench、HLE 和 OSWorld 2.1。</sub></p>
+<p align="left"><sub>图 1：内外部任务上的效果与成本。WorkIndex (internal) 包含 8 个内部评测集：PPT 制作、PPT 修改、PPT 人机双写、Markdown 人机双写、文档编辑、表格修复、音视频处理和视觉理解。<br/>Open Benchmarks 包含 7 个公开 Agent 评测集：DeepSWE、ProgramBench、Terminal-Bench 4.0、APEX-Agents、AutomationBench、HLE 和 OSWorld 2.1。</sub></p>
 
 <p align="center">
   <a href="assets/workindex-cost.png"><img src="assets/workindex-cost.png" alt="Hy4 flash、Hy4 preview 和 Hy4 的 WorkIndex 平均单任务成本与得分" width="100%"/></a>
 </p>
-<p align="center"><sub>图 2：WorkIndex 平均单任务成本对比；Hy4 flash、Hy4 preview、Hy4 的任务得分分别为 42.1、39.7、51.4。</sub></p>
+<p align="left"><sub>图 2：WorkIndex 平均单任务成本对比；Hy4 flash、Hy4 preview、Hy4 的任务得分分别为 42.1、39.7、51.4。</sub></p>
 
 我们推荐在**深度搜索、文档处理、PPT 制作、简单前端展示和 computer use** 等大部分日常任务中使用 Hy4 flash；对于长程软件工程等复杂任务，仍推荐智能上限更高的 Hy4。
 
@@ -149,7 +150,7 @@
 <p align="center">
   <a href="assets/blind-evaluation-zh.png"><img src="assets/blind-evaluation-zh.png" alt="用户盲测中的满意度、端到端任务时长中位数和单任务成本对比" width="100%"/></a>
 </p>
-<p align="center"><sub>图 3：85 位 WorkBuddy 内部用户在 27 类、259 个日常工作任务上的盲测结果。</sub></p>
+<p align="left"><sub>图 3：85 位 WorkBuddy 内部用户在 27 类、259 个日常工作任务上的盲测结果。</sub></p>
 
 ## Benchmark 附录
 
@@ -267,7 +268,8 @@ DFly2 是基于 [AngelSpec](https://github.com/Tencent/AngelSpec) 框架训练�
 
 对于生产环境部署，我们建议使用 [vLLM](https://github.com/vllm-project/vllm) 或 [SGLang](https://docs.sglang.io/)。请参考部署方案：
 - [Hy4 flash vLLM Recipe](https://recipes.vllm.ai/tencent/Hy4-flash)
-- [Hy4 flash SGLang Cookbook（敬请期待）](https://lmsysorg.mintlify.app/cookbook/autoregressive/Tencent/Hy4-flash)
+- [Hy4 flash SGLang Cookbook](https://docs.sglang.io/cookbook/autoregressive/Tencent/Hy4-flash)
+
 
 
 #### vLLM
@@ -293,8 +295,25 @@ docker run --gpus all \
 
 #### SGLang
 
-SGLang 社区官方镜像稍后提供，敬请期待。
+使用社区官方镜像 `lmsysorg/sglang:hy4-flash` 部署，（支持 x86 和 Arm）。
 
+```bash
+docker pull lmsysorg/sglang:hy4-flash
+
+docker run --gpus all \
+  -p 8000:8000 \
+  --ipc=host \
+  lmsysorg/sglang:hy4-flash \
+  sglang serve \
+    --trust-remote-code \
+    --model-path tencent/Hy4-flash-FP8 \
+    --tp 8 \
+    --cuda-graph-backend-prefill disabled \
+    --speculative-algorithm DFLY \
+    --speculative-dfly-block-size 6 \
+    --host 127.0.0.1 \
+    --port 8000
+```
 
 ## 模型微调
 
